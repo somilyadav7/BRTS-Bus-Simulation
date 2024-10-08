@@ -65,6 +65,7 @@ public:
         this->age=age;
         this->AdharCard=AdharCard;
     }
+
     Person(string name,int age) {
         this->Name=name;
         this->age=age;
@@ -421,7 +422,7 @@ public:
         }
         for(int i=0;i<TotalVehicles;i++) {
             Chigris[i].driver.PrintEmployee();
-            cout << "Currently Working Driving: " << Chigris[i].getVhno() << endl << endl;
+            cout << "Currently Driving: " << Chigris[i].getVhno() << endl << endl;
         }
     }
     Bus createBus() {
@@ -575,6 +576,14 @@ public:
         }
         return -1;
     }
+    int getStationIndex(string bs) {
+        for(int i=0;i<TotalStations;i++) {
+            if(bs==stations[i].getName()) {
+                return i;
+            }
+        }
+        return -1;
+    }
     void simulatePerson() {
         int id,c;
         if(TotalVehicles<1||TotalPassengers==0||TotalStations<=2) throw BRTSExceptions(303);
@@ -625,7 +634,7 @@ public:
             if(p->hasPass()&&p->pass.VerifyTravel(&p->CurrentLocation,bs)) {
                 movetostation(p,bs);
             } else if(!p->hasPass()) {
-                cout << "You Doesn't Bus Pass" << endl;
+                cout << "You Don't Bus Pass" << endl;
                 traveloptions(p,bs,fare);
             } else {
                 cout << "Your Bus Pass is not valid for current Source and Destination" << endl;
@@ -716,6 +725,9 @@ public:
         simulate(p);
     }
     bool checkfine(BusStation *b1,BusStation *b2) {
+        int i1=getStationIndex(b1->getName());
+        int i2=getStationIndex(b2->getName());
+        if(i1<i2) return false;
         if(b1->getName()!=b2->getName()) return true;
         return false;
     }
